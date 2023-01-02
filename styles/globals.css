@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-black text-white;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-[6px] rounded-md;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-600;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-white;
+  }
+}
+
+@layer components {
+  .navLink {
+    @apply text-sm hover:text-red-500 transition duration-300 font-light cursor-pointer;
+  }
+}
