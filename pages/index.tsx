@@ -37,7 +37,7 @@ const Home = ({
 
       <main>
         {/* Hero */}
-        <Hero />
+        <Hero NetflixOriginals={NetflixOriginals} />
 
         <section>
           {/* Row */}

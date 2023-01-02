@@ -19,7 +19,7 @@ const Navbar = () => {
   return (
     <div
       className={`flex items-center justify-between px-4 md:px-8 py-4 md:py-6 fixed top-0 w-full transition-all z-50 ${
-        windowScroll ? "bg-[#3b3a3b]" : "bg-black"
+        windowScroll ? "bg-[#3b3a3b]" : "bg-[transparent]"
       }`}
     >
       <div className="flex items-center  md:space-x-10">

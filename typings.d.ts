@@ -1,4 +1,6 @@
 export interface Movie {
+  name: string;
+  original_name: string;
   title: string;
   backdrop_path: string;
   media_type?: string;
