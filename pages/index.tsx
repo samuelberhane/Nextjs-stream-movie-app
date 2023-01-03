@@ -1,6 +1,6 @@
 import axios from "axios";
 import Head from "next/head";
-import { Navbar, Hero } from "../components";
+import { Navbar, Hero, Category } from "../components";
 import requests from "../utils/requests";
 import { Movie } from "../typings";
 
@@ -26,7 +26,7 @@ const Home = ({
   Documentaries,
 }: Props) => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen gradient-to-b">
       <Head>
         <title>Home - Stream Netflix Clone</title>
         <link rel="icon" href="/favicon.ico" />
@@ -39,11 +39,15 @@ const Home = ({
         {/* Hero */}
         <Hero NetflixOriginals={NetflixOriginals} />
 
-        <section>
-          {/* Row */}
-          {/* Row */}
-          {/* Row */}
-          {/* Row */}
+        <section className="absolute top-[77vh] left-0 right-0 z-10 px-2 md:px-4 lg:px-6">
+          {/* Category */}
+          <Category Movies={Trending} title="Trending" />
+          <Category Movies={TopRated} title="Top Rated" />
+          <Category Movies={ActionMovies} title="Action Movies" />
+          <Category Movies={ComedyMovies} title="Comedy Movies" />
+          <Category Movies={HorrorMovies} title="Horror Movies" />
+          <Category Movies={RomanceMovies} title="Romance Movies" />
+          <Category Movies={Documentaries} title="Documentaries" />
         </section>
       </main>
       {/* Modal */}

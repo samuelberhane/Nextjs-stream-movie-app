@@ -11,7 +11,7 @@
     @apply w-[6px] rounded-md;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-600;
+    @apply bg-red-500;
   }
   ::-webkit-scrollbar-track {
     @apply bg-white;

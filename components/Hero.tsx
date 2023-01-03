@@ -17,8 +17,8 @@ const Hero = ({ NetflixOriginals }: Prop) => {
   }, []);
 
   return (
-    <div className="text-white w-full h-screen relative">
-      <div className="absolute top-0 left-0 w-full h-screen -z-10">
+    <div className="text-white w-full h-screen relative md:h-[125vh]">
+      <div className="absolute top-0 left-0 w-full h-[100%] z-10">
         <Image
           src={`${baseUrl}${
             currentMovie?.backdrop_path || currentMovie?.poster_path
