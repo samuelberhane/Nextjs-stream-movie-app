@@ -7,13 +7,7 @@ import {
 } from "firebase/auth";
 
 import { useRouter } from "next/router";
-import React, {
-  useState,
-  createContext,
-  useMemo,
-  useEffect,
-  useContext,
-} from "react";
+import React, { useState, createContext, useMemo, useEffect } from "react";
 import { auth } from "../firebase/config";
 
 interface Auth {
@@ -23,6 +17,7 @@ interface Auth {
   Logout: () => Promise<void>;
   error: string | null;
   isLoading: boolean;
+  initialLoading: boolean;
 }
 
 export const AuthContext = createContext<Auth>({
@@ -32,6 +27,7 @@ export const AuthContext = createContext<Auth>({
   Logout: async () => {},
   error: null,
   isLoading: false,
+  initialLoading: true,
 });
 
 interface AuthContextProp {
@@ -48,15 +44,17 @@ export const AuthContextProvider = ({ children }: AuthContextProp) => {
   useEffect(
     () =>
       onAuthStateChanged(auth, (user) => {
+        setInitialLoading(true);
         if (user) {
+          setInitialLoading(false);
           setUser(user);
           setIsLoading(false);
         } else {
+          setInitialLoading(false);
           setUser(null);
-          setIsLoading(true);
-          router.push("/login");
+          setIsLoading(false);
+          router.push("/auth/login");
         }
-        setInitialLoading(false);
       }),
     [auth]
   );
@@ -111,13 +109,11 @@ export const AuthContextProvider = ({ children }: AuthContextProp) => {
   };
 
   const memoedValue = useMemo(
-    () => ({ user, Signup, Signin, error, isLoading, Logout }),
+    () => ({ user, Signup, Signin, error, isLoading, Logout, initialLoading }),
     [user, isLoading, error]
   );
 
   return (
-    <AuthContext.Provider value={memoedValue}>
-      {initialLoading || children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={memoedValue}>{children}</AuthContext.Provider>
   );
 };

@@ -1,8 +1,9 @@
 import axios from "axios";
 import Head from "next/head";
-import { Navbar, Hero, Category } from "../components";
+import { Navbar, Hero, Category, Loader } from "../components";
 import requests from "../utils/requests";
 import { Movie } from "../typings";
+import useGlobalAuthContext from "../hooks/useGlobalAuthProvider";
 
 interface Props {
   Trending: [Movie];
@@ -25,6 +26,10 @@ const Home = ({
   RomanceMovies,
   Documentaries,
 }: Props) => {
+  const { user, initialLoading } = useGlobalAuthContext();
+
+  if (initialLoading) return <Loader />;
+
   return (
     <div className="min-h-screen gradient-to-b">
       <Head>

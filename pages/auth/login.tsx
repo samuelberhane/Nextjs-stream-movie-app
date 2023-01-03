@@ -2,6 +2,8 @@ import Head from "next/head";
 import Image from "next/image";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { Loader } from "../../components";
+import useGlobalAuthContext from "../../hooks/useGlobalAuthProvider";
 
 interface FormData {
   email: string;
@@ -10,15 +12,28 @@ interface FormData {
 
 const Login = () => {
   const [login, setLogin] = useState(false);
+  const { Signin, Signup, error, isLoading } = useGlobalAuthContext();
+  let formatError;
+  if (error) {
+    formatError = error.replace("Firebase: Error (auth/", "").replace(")", "");
+  }
+
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<FormData>();
 
-  const onSubmit: SubmitHandler<FormData> = async (data) => {};
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    const { email, password } = data;
+    if (login) {
+      Signin(email, password);
+    } else {
+      Signup(email, password);
+    }
+  };
 
+  if (isLoading) return <Loader />;
   return (
     <div className="relative w-full h-screen flex sm:items-center sm:justify-center flex-col bg-black sm:bg-transparent">
       <Head>
@@ -68,6 +83,12 @@ const Login = () => {
           {errors.password && (
             <p className=" text-center p-1 text-[13px] font-light  text-red-300">
               Password should contain at least 6 characters!
+            </p>
+          )}
+
+          {error && (
+            <p className=" text-center p-1 text-[16px] font-light  text-red-300">
+              {formatError}
             </p>
           )}
         </label>
