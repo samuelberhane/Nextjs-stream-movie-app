@@ -26,6 +26,6 @@
     @apply text-sm px-3 py-2 md:px-5 lg:px-6 md:text-lg rounded;
   }
   .input {
-    @apply w-full px-3 py-2 rounded bg-[rgba(98,98,98,0.7)] text-white focus:bg-white focus:text-black;
+    @apply w-full px-3 py-2 rounded bg-[rgba(98,98,98,0.7)] text-white focus:bg-white focus:text-black outline-none;
   }
 }

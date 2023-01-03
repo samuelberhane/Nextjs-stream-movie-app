@@ -1,7 +1,24 @@
 import Head from "next/head";
 import Image from "next/image";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+
+interface FormData {
+  email: string;
+  password: string;
+}
 
 const Login = () => {
+  const [login, setLogin] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<FormData>();
+
+  const onSubmit: SubmitHandler<FormData> = async (data) => {};
+
   return (
     <div className="relative w-full h-screen flex sm:items-center sm:justify-center flex-col bg-black sm:bg-transparent">
       <Head>
@@ -19,20 +36,57 @@ const Login = () => {
         alt="netflixBg"
       />
 
-      <form className="mt-20 mx-4 z-20 sm:bg-[rgba(0,0,0,0.6)] sm:px-6 sm:py-3">
+      <form
+        className="mt-20 mx-4 z-20 sm:bg-[rgba(0,0,0,0.7)] sm:px-6 sm:py-3 sm:w-[320px]"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <h1 className="font-bold text-3xl mb-4">Sign In</h1>
         <label className="block mb-3">
-          <input type="text" placeholder="Email" className="input" />
+          <input
+            type="text"
+            placeholder="Email"
+            className="input"
+            {...register("email", {
+              required: true,
+              pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+            })}
+          />
+          {errors.email && (
+            <p className=" text-center p-1 text-[13px] font-light  text-red-300">
+              Please enter a valid email address!
+            </p>
+          )}
         </label>
         <label className="block">
-          <input type="password" placeholder="password" className="input" />
+          <input
+            type="password"
+            placeholder="Password"
+            className="input"
+            {...register("password", { required: true, minLength: 6 })}
+          />
+
+          {errors.password && (
+            <p className=" text-center p-1 text-[13px] font-light  text-red-300">
+              Password should contain at least 6 characters!
+            </p>
+          )}
         </label>
-        <button className="mt-4 w-full rounded py-2 bg-red-600" type="submit">
+        <button
+          className="mt-4 w-full rounded py-2 bg-red-600"
+          type="submit"
+          onClick={() => setLogin(true)}
+        >
           Sign In
         </button>
         <p className="mt-2 text-gray-400">
           New to Stream?{" "}
-          <span className="cursor-pointer text-white">Sign up now</span>
+          <button
+            className="cursor-pointer text-white"
+            type="submit"
+            onClick={() => setLogin(false)}
+          >
+            Sign up now
+          </button>
         </p>
       </form>
     </div>
