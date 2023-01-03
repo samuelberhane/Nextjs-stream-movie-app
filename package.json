@@ -8,6 +8,7 @@
   "dependencies": {
     "@heroicons/react": "^2.0.13",
     "axios": "^1.2.2",
+    "firebase": "^9.15.0",
     "heroicons": "^2.0.13",
     "next": "latest",
     "react": "18.2.0",
