@@ -42,7 +42,9 @@ const Hero = ({ NetflixOriginals }: Prop) => {
         <div className="flex space-x-2 md:space-x-4 lg:space-x-5 items-center mt-2 md:mt-4">
           <button
             className="heroBtn flex items-center bg-white text-black"
-            onClick={() => dispatch({ type: "OPEN_MODAL" })}
+            onClick={() =>
+              dispatch({ type: "OPEN_MODAL", payload: currentMovie })
+            }
           >
             <BsPlayFill className="text-black md:w-7 md:h-7" /> Play
           </button>

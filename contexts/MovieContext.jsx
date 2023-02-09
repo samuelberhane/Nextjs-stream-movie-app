@@ -6,19 +6,17 @@ const reducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
     case "OPEN_MODAL":
-      return { ...state, isModalOpen: true };
-
+      return { ...state, isModalOpen: true, currentMovie: payload };
     case "CLOSE_MODAL":
-      return { ...state, isModalOpen: false };
-
+      return { ...state, isModalOpen: false, currentMovie: null };
     default:
-      break;
+      return state;
   }
 };
 
 const initialState = {
   isModalOpen: true,
-  modalContent: null,
+  currentMovie: null,
 };
 
 const MovieContextProvider = ({ children }) => {
