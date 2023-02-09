@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { Movie } from "../typings";
 import { baseUrl } from "../utils/variables";
 import { BsPlayFill, BsFillInfoCircleFill } from "react-icons/bs";
+import { useGlobalMovieProvider } from "../contexts/MovieContext";
 interface Prop {
   NetflixOriginals: [Movie];
 }
 
 const Hero = ({ NetflixOriginals }: Prop) => {
+  const { dispatch } = useGlobalMovieProvider();
   const [currentMovie, setCurrentMovie] = useState<Movie | null>(null);
 
   useEffect(() => {
@@ -38,7 +40,10 @@ const Hero = ({ NetflixOriginals }: Prop) => {
           {currentMovie?.overview}
         </p>
         <div className="flex space-x-2 md:space-x-4 lg:space-x-5 items-center mt-2 md:mt-4">
-          <button className="heroBtn flex items-center bg-white text-black">
+          <button
+            className="heroBtn flex items-center bg-white text-black"
+            onClick={() => dispatch({ type: "OPEN_MODAL" })}
+          >
             <BsPlayFill className="text-black md:w-7 md:h-7" /> Play
           </button>
           <button className="heroBtn bg-[rgba(82,63,63,0.4)] flex items-center gap-2">

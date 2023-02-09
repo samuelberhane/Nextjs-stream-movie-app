@@ -6,9 +6,10 @@ const reducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
     case "OPEN_MODAL":
-      break;
+      return { ...state, isModalOpen: true };
+
     case "CLOSE_MODAL":
-      break;
+      return { ...state, isModalOpen: false };
 
     default:
       break;
@@ -16,7 +17,7 @@ const reducer = (state, action) => {
 };
 
 const initialState = {
-  isModalOpen: false,
+  isModalOpen: true,
   modalContent: null,
 };
 

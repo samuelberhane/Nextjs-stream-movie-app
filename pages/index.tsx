@@ -1,9 +1,10 @@
 import axios from "axios";
 import Head from "next/head";
-import { Navbar, Hero, Category, Loader } from "../components";
+import { Navbar, Hero, Category, Loader, MovieModal } from "../components";
 import requests from "../utils/requests";
 import { Movie } from "../typings";
 import useGlobalAuthContext from "../hooks/useGlobalAuthProvider";
+import { useGlobalMovieProvider } from "../contexts/MovieContext";
 
 interface Props {
   Trending: [Movie];
@@ -26,6 +27,7 @@ const Home = ({
   RomanceMovies,
   Documentaries,
 }: Props) => {
+  const { isModalOpen } = useGlobalMovieProvider();
   const { user, initialLoading } = useGlobalAuthContext();
 
   if (initialLoading) return <Loader />;
@@ -56,6 +58,7 @@ const Home = ({
         </section>
       </main>
       {/* Modal */}
+      {isModalOpen && <MovieModal />}
     </div>
   );
 };
