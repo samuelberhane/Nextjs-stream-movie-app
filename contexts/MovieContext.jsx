@@ -15,7 +15,7 @@ const reducer = (state, action) => {
 };
 
 const initialState = {
-  isModalOpen: true,
+  isModalOpen: false,
   currentMovie: null,
 };
 
