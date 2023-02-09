@@ -5,6 +5,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../firebase/config";
 import { useRouter } from "next/router";
 import Loader from "./Loader";
+import axios from "axios";
 
 const Navbar = () => {
   const router = useRouter();
@@ -25,8 +26,9 @@ const Navbar = () => {
   const Logout = async () => {
     setLoading(true);
     await signOut(auth)
-      .then(() => {
+      .then(async () => {
         router.push("/auth/login");
+        await axios.post("/api/logout");
       })
       .catch((error) => {
         console.log(error.message);

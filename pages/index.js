@@ -47,7 +47,16 @@ const Home = ({
   );
 };
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (context) => {
+  if (!context.req?.cookies?.token) {
+    return {
+      redirect: {
+        destination: "/auth/login",
+        permanent: false,
+      },
+    };
+  }
+
   const [
     Trending,
     NetflixOriginals,

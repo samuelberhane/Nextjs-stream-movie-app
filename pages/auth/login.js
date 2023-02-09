@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -21,8 +22,9 @@ const Login = () => {
     if (string === "login") {
       //login user
       await signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
           const user = userCredential.user;
+          await axios.post("/api/login");
           router.push("/");
         })
         .catch((error) => {
@@ -30,8 +32,9 @@ const Login = () => {
         });
     } else {
       await createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
           const user = userCredential.user;
+          await axios.post("/api/login");
           router.push("/");
         })
         .catch((error) => {
@@ -40,23 +43,6 @@ const Login = () => {
     }
     setLoading(false);
   };
-  // useEffect(
-  //   () =>
-  //     onAuthStateChanged(auth, (user) => {
-  //       setInitialLoading(true);
-  //       if (!user) {
-  //         setInitialLoading(false);
-  //         setUser(user);
-  //         setLoading(false);
-  //       } else {
-  //         setInitialLoading(false);
-  //         setUser(null);
-  //         setLoading(false);
-  //         router.push("/");
-  //       }
-  //     }),
-  //   [auth]
-  // );
 
   if (loading) return <Loader />;
   return (
@@ -127,8 +113,16 @@ const Login = () => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  console.log("context", context);
+export const getServerSideProps = async function (context) {
+  if (context.req?.cookies?.token) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
   return {
     props: {},
   };
