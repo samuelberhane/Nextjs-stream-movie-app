@@ -3,6 +3,11 @@ import Head from "next/head";
 import { Navbar, Hero, Category, Loader, MovieModal } from "../components";
 import requests from "../utils/requests";
 import { useGlobalMovieProvider } from "../contexts/MovieContext";
+import { doc, getDoc } from "firebase/firestore";
+import { auth, db } from "../firebase/config";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Home = ({
   Trending,
@@ -15,6 +20,27 @@ const Home = ({
   Documentaries,
 }) => {
   const { isModalOpen } = useGlobalMovieProvider();
+  const router = useRouter();
+  const [userSubscribe, setUserSubscribe] = useState(false);
+  const [loading, setLoading] = useState(null);
+
+  // check if user subscribe
+  useEffect(() => {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userRef = doc(db, "users", user?.email);
+        const userExists = await getDoc(userRef);
+        console.log("userExists", userExists.data());
+        if (!userExists.data()) router.push("/subscribe");
+        else {
+          setUserSubscribe(userExists.data());
+        }
+      }
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading || !userSubscribe) return <Loader />;
 
   return (
     <div className="min-h-screen gradient-to-b">

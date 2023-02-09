@@ -28,7 +28,7 @@ const fulfilledOrder = async (session) => {
   return app
     .firestore()
     .collection("users")
-    .doc(session.metadata.email)
+    .doc(session.metadata.userEmail)
     .set({
       amount: session.amount_total / 100,
       planNumber: session.metadata.planNumber,
