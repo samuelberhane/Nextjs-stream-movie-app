@@ -32,6 +32,6 @@
     @apply flex gap-2 md:gap-5;
   }
   .subContent {
-    @apply flex items-center justify-between h-[50px] w-[70px] text-sm md:h-[70px] md:text-lg md:w-[90px];
+    @apply flex items-center justify-between h-[50px] w-[70px] text-sm md:h-[70px] md:text-lg md:w-[90px] rounded;
   }
 }

@@ -6,8 +6,11 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import Link from "next/link";
 import { BsCheck2 } from "react-icons/bs";
+import { loadStripe } from "@stripe/stripe-js";
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
 const Subscribe = () => {
+  const [plan, setPlan] = useState(3);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -22,6 +25,43 @@ const Subscribe = () => {
         console.log(error.message);
       });
     setLoading(false);
+  };
+
+  const createCheckoutSession = async () => {
+    const stripe = await stripePromise;
+    let planForm = {};
+    switch (plan) {
+      case 1:
+        planForm.planNumber = 1;
+        planForm.planName = "Basic";
+        planForm.planPrice = 29;
+        break;
+      case 2:
+        planForm.planNumber = 2;
+        planForm.planName = "Standard";
+        planForm.planPrice = 40;
+        break;
+      case 3:
+        planForm.planNumber = 3;
+        planForm.planName = "Premium";
+        planForm.planPrice = 52;
+        break;
+      default:
+        break;
+    }
+
+    const checkoutSession = await axios.post("/api/create-checkout-session", {
+      planForm,
+      email: auth?.currentUser?.email,
+    });
+
+    const result = await stripe.redirectToCheckout({
+      sessionId: checkoutSession.data.id,
+    });
+
+    if (result.error) {
+      alert(result.error.message);
+    }
   };
 
   if (loading) return <Loader />;
@@ -58,13 +98,28 @@ const Subscribe = () => {
         <div className="flex mt-8 justify-between">
           <div />
           <div className="subContainer">
-            <div className="bg-red-300 subContent">
+            <div
+              onClick={() => setPlan(1)}
+              className={`${
+                plan === 1 ? "bg-red-500" : "bg-red-300"
+              } subContent cursor-pointer`}
+            >
               <p className="w-full text-center">Basic</p>
             </div>
-            <div className="bg-red-300 subContent">
+            <div
+              onClick={() => setPlan(2)}
+              className={`${
+                plan === 2 ? "bg-red-500" : "bg-red-300"
+              }  subContent cursor-pointer`}
+            >
               <p className="w-full text-center">Standard</p>
             </div>
-            <div className="bg-red-500 subContent">
+            <div
+              onClick={() => setPlan(3)}
+              className={`${
+                plan === 3 ? "bg-red-500" : "bg-red-300"
+              }  subContent cursor-pointer`}
+            >
               <p className="w-full text-center">Premium</p>
             </div>
           </div>
@@ -74,13 +129,13 @@ const Subscribe = () => {
         <div className="flex mt-2 items-center justify-between border-b-2">
           <div>Monthly price</div>
           <div className="subContainer">
-            <div className="subContent">
+            <div className={`subContent ${plan === 1 && "text-red-500"}`}>
               <p>USD29</p>
             </div>
-            <div className="subContent">
+            <div className={`subContent ${plan === 2 && "text-red-500"}`}>
               <p>USD40</p>
             </div>
-            <div className="subContent text-red-500">
+            <div className={`subContent ${plan === 3 && "text-red-500"}`}>
               <p>USD52</p>
             </div>
           </div>
@@ -90,13 +145,13 @@ const Subscribe = () => {
         <div className="flex mt-2 items-center justify-between border-b-2">
           <div>Video quality</div>
           <div className="subContainer">
-            <div className="subContent">
+            <div className={`subContent ${plan === 1 && "text-red-500"}`}>
               <p>Good</p>
             </div>
-            <div className="subContent">
+            <div className={`subContent ${plan === 2 && "text-red-500"}`}>
               <p>Better</p>
             </div>
-            <div className="subContent text-red-500">
+            <div className={`subContent ${plan === 3 && "text-red-500"}`}>
               <p>Best</p>
             </div>
           </div>
@@ -106,20 +161,23 @@ const Subscribe = () => {
         <div className="flex mt-2 justify-between items-center border-b-2">
           <div>Resolution</div>
           <div className="subContainer">
-            <div className="subContent">
+            <div className={`subContent ${plan === 1 && "text-red-500"}`}>
               <p>480p</p>
             </div>
-            <div className="subContent">
+            <div className={`subContent ${plan === 2 && "text-red-500"}`}>
               <p>1080p</p>
             </div>
-            <div className="subContent text-red-500">
+            <div className={`subContent ${plan === 3 && "text-red-500"}`}>
               <p>4K+HDR</p>
             </div>
           </div>
         </div>
 
         <div className="flex justify-center mt-6">
-          <button className="bg-red-500 text-white py-3 px-20">
+          <button
+            className="bg-red-500 text-white py-3 px-20 rounded"
+            onClick={createCheckoutSession}
+          >
             Subscribe
           </button>
         </div>
