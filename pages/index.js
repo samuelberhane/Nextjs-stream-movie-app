@@ -2,20 +2,7 @@ import axios from "axios";
 import Head from "next/head";
 import { Navbar, Hero, Category, Loader, MovieModal } from "../components";
 import requests from "../utils/requests";
-import { Movie } from "../typings";
-import useGlobalAuthContext from "../hooks/useGlobalAuthProvider";
 import { useGlobalMovieProvider } from "../contexts/MovieContext";
-
-interface Props {
-  Trending: [Movie];
-  NetflixOriginals: [Movie];
-  TopRated: [Movie];
-  ActionMovies: [Movie];
-  ComedyMovies: [Movie];
-  HorrorMovies: [Movie];
-  RomanceMovies: [Movie];
-  Documentaries: [Movie];
-}
 
 const Home = ({
   Trending,
@@ -26,11 +13,8 @@ const Home = ({
   HorrorMovies,
   RomanceMovies,
   Documentaries,
-}: Props) => {
+}) => {
   const { isModalOpen } = useGlobalMovieProvider();
-  const { user, initialLoading } = useGlobalAuthContext();
-
-  if (initialLoading) return <Loader />;
 
   return (
     <div className="min-h-screen gradient-to-b">

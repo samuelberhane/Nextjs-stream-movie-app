@@ -1,12 +1,15 @@
 import { GoSearch } from "react-icons/go";
 import { AiFillBell } from "react-icons/ai";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import useGlobalAuthProvider from "../hooks/useGlobalAuthProvider";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase/config";
+import { useRouter } from "next/router";
+import Loader from "./Loader";
 
 const Navbar = () => {
-  const { Logout } = useGlobalAuthProvider();
+  const router = useRouter();
   const [windowScroll, setWindowScroll] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // change navbar background with window scroll effect
   useEffect(() => {
@@ -17,6 +20,21 @@ const Navbar = () => {
     window.addEventListener("scroll", handleWindowScroll);
     return () => window.removeEventListener("scroll", handleWindowScroll);
   }, []);
+
+  // user logout
+  const Logout = async () => {
+    setLoading(true);
+    await signOut(auth)
+      .then(() => {
+        router.push("/auth/login");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+    setLoading(false);
+  };
+
+  if (loading) return <Loader />;
 
   return (
     <div
