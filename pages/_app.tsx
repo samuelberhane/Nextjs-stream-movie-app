@@ -1,11 +1,14 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { AuthContextProvider } from "../hooks/useAuth";
+import { MovieContextProvider } from "../contexts/MovieContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthContextProvider>
-      <Component {...pageProps} />
+      <MovieContextProvider>
+        <Component {...pageProps} />
+      </MovieContextProvider>
     </AuthContextProvider>
   );
 }

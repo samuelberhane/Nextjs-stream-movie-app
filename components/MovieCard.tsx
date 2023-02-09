@@ -1,3 +1,4 @@
+import { log } from "console";
 import Image from "next/image";
 import { Movie } from "../typings";
 
