@@ -19,10 +19,10 @@ const Home = ({
   RomanceMovies,
   Documentaries,
 }) => {
-  const { isModalOpen } = useGlobalMovieProvider();
+  const { isModalOpen, dispatch } = useGlobalMovieProvider();
   const router = useRouter();
   const [userSubscribe, setUserSubscribe] = useState(false);
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   // check if user subscribe
   useEffect(() => {
@@ -30,10 +30,11 @@ const Home = ({
       if (user) {
         const userRef = doc(db, "users", user?.email);
         const userExists = await getDoc(userRef);
-        console.log("userExists", userExists.data());
+
         if (!userExists.data()) router.push("/subscribe");
         else {
-          setUserSubscribe(userExists.data());
+          setUserSubscribe(true);
+          dispatch({ type: "SUBSCRIBE", payload: userExists.data() });
         }
       }
       setLoading(false);

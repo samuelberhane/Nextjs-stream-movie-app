@@ -9,6 +9,8 @@ const reducer = (state, action) => {
       return { ...state, isModalOpen: true, currentMovie: payload };
     case "CLOSE_MODAL":
       return { ...state, isModalOpen: false, currentMovie: null };
+    case "SUBSCRIBE":
+      return { ...state, userSubscribe: payload };
     default:
       return state;
   }
@@ -17,6 +19,7 @@ const reducer = (state, action) => {
 const initialState = {
   isModalOpen: false,
   currentMovie: null,
+  userSubscribe: null,
 };
 
 const MovieContextProvider = ({ children }) => {

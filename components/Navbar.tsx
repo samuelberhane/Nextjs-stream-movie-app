@@ -64,14 +64,13 @@ const Navbar = () => {
         <GoSearch className="text-white w-6 h-6 hidden sm:inline" />
         <p className="hidden lg:inline">Kids</p>
         <AiFillBell className="w-7 h-7" />
-        {/* <Link href="/account"> */}
-        <img
-          onClick={Logout}
-          src="https://rb.gy/g1pwyx"
-          alt=""
-          className="cursor-pointer rounded"
-        />
-        {/* </Link> */}
+        <Link href="/account">
+          <img
+            src="https://rb.gy/g1pwyx"
+            alt=""
+            className="cursor-pointer rounded"
+          />
+        </Link>
       </div>
     </div>
   );
