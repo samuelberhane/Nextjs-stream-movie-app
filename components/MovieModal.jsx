@@ -51,8 +51,8 @@ const MovieModal = () => {
           muted={muted}
         />
         <div className="relative">
-          <div className="flex justify-between items-center absolute -top-12 px-10 md:px-12 text-3xl text-white w-full">
-            <AiOutlineCheckCircle className="cursor-pointer" />
+          <div className="flex justify-between items-center absolute -top-10 px-10 md:px-12 text-3xl text-white w-full">
+            {/* <AiOutlineCheckCircle className="cursor-pointer" /> */}
             <div onClick={() => setMuted((prev) => !prev)}>
               {!muted ? (
                 <BsVolumeUp className="cursor-pointer" />

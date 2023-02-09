@@ -25,7 +25,7 @@ const Login = () => {
         .then(async (userCredential) => {
           const user = userCredential.user;
           await axios.post("/api/login");
-          router.push("/");
+          router.push("/subscribe");
         })
         .catch((error) => {
           setError(error.message);
@@ -35,7 +35,7 @@ const Login = () => {
         .then(async (userCredential) => {
           const user = userCredential.user;
           await axios.post("/api/login");
-          router.push("/");
+          router.push("/subscribe");
         })
         .catch((error) => {
           setError(error.message);
@@ -117,7 +117,7 @@ export const getServerSideProps = async function (context) {
   if (context.req?.cookies?.token) {
     return {
       redirect: {
-        destination: "/",
+        destination: "/subscribe",
         permanent: false,
       },
     };

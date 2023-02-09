@@ -6,6 +6,7 @@ import { auth } from "../firebase/config";
 import { useRouter } from "next/router";
 import Loader from "./Loader";
 import axios from "axios";
+import Link from "next/link";
 
 const Navbar = () => {
   const router = useRouter();
@@ -45,9 +46,12 @@ const Navbar = () => {
       }`}
     >
       <div className="flex items-center  md:space-x-10">
-        <h1 className="text-red-500 font-bold text-3xl md:text-4xl uppercase items-center">
+        <Link
+          href="/"
+          className="text-red-500 font-bold text-3xl md:text-4xl uppercase items-center"
+        >
           Stream
-        </h1>
+        </Link>
         <ul className="hidden md:flex space-x-4">
           <li className="navLink">Home</li>
           <li className="navLink">Tv Shows</li>
