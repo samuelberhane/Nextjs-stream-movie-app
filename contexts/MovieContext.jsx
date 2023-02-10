@@ -24,7 +24,6 @@ const initialState = {
 
 const MovieContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log("state", state);
   return (
     <MovieContext.Provider value={{ dispatch, ...state }}>
       {children}

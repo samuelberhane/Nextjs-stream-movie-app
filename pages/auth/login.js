@@ -3,18 +3,21 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Loader } from "../../components";
-import { auth } from "../../firebase/config";
+import { auth, db } from "../../firebase/config";
+import { useGlobalMovieProvider } from "../../contexts/MovieContext";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { dispatch } = useGlobalMovieProvider();
   const router = useRouter();
 
   const handleSubmit = async (string) => {
@@ -24,8 +27,16 @@ const Login = () => {
       await signInWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
           const user = userCredential.user;
-          await axios.post("/api/login");
-          router.push("/subscribe");
+          if (user) {
+            await axios.post("/api/login", { email });
+            const userRef = doc(db, "users", email);
+            const userExists = await getDoc(userRef);
+            if (!userExists.data()) router.push("/subscribe");
+            else {
+              dispatch({ type: "SUBSCRIBE", payload: userExists.data() });
+              router.push("/");
+            }
+          }
         })
         .catch((error) => {
           setError(error.message);
@@ -114,10 +125,10 @@ const Login = () => {
 };
 
 export const getServerSideProps = async function (context) {
-  if (context.req?.cookies?.token) {
+  if (context?.req?.cookies?.token) {
     return {
       redirect: {
-        destination: "/subscribe",
+        destination: "/",
         permanent: false,
       },
     };

@@ -19,29 +19,28 @@ const Home = ({
   RomanceMovies,
   Documentaries,
 }) => {
-  const { isModalOpen, dispatch } = useGlobalMovieProvider();
+  const { isModalOpen } = useGlobalMovieProvider();
   const router = useRouter();
-  const [userSubscribe, setUserSubscribe] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
-  // check if user subscribe
+  // check if user subscribed
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         const userRef = doc(db, "users", user?.email);
         const userExists = await getDoc(userRef);
-
-        if (!userExists.data()) router.push("/subscribe");
-        else {
-          setUserSubscribe(true);
-          dispatch({ type: "SUBSCRIBE", payload: userExists.data() });
+        if (userExists.data()) {
+          setUser(userExists.data());
+        } else {
+          router.push("/subscribe");
         }
+        setLoading(false);
       }
-      setLoading(false);
     });
-  }, []);
+  }, [user]);
 
-  if (loading || !userSubscribe) return <Loader />;
+  if (loading || !user) return <Loader />;
 
   return (
     <div className="min-h-screen gradient-to-b">
@@ -75,6 +74,7 @@ const Home = ({
 };
 
 export const getServerSideProps = async (context) => {
+  // redirect user to login page if not logged in
   if (!context.req?.cookies?.token) {
     return {
       redirect: {

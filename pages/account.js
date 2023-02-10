@@ -1,14 +1,36 @@
-import React from "react";
-import { Navbar } from "../components";
+import React, { useEffect, useState } from "react";
+import { Loader, Navbar } from "../components";
 import { HiDocumentDuplicate } from "react-icons/hi";
-import { useGlobalMovieProvider } from "../contexts/MovieContext";
 import moment from "moment";
-import { auth } from "../firebase/config";
+import { auth, db } from "../firebase/config";
+import { doc, getDoc } from "firebase/firestore";
+import { useRouter } from "next/router";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Account = () => {
-  const { userSubscribe } = useGlobalMovieProvider();
-  let date = moment.unix(userSubscribe?.timestamp?.seconds);
-  console.log(date.format("dddd, Do MMM YYYY, h:mm:ss A"), userSubscribe);
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const router = useRouter();
+
+  // check if user subscribed
+  useEffect(() => {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userRef = doc(db, "users", user?.email);
+        const userExists = await getDoc(userRef);
+        if (userExists.data()) {
+          setUser(userExists.data());
+        } else {
+          router.push("/subscribe");
+        }
+        setLoading(false);
+      }
+    });
+  }, [user]);
+
+  if (loading || !user) return <Loader />;
+
+  let date = moment.unix(user?.timestamp?.seconds);
 
   return (
     <div>
@@ -36,7 +58,7 @@ const Account = () => {
           </div>
           <div className="mt-2 mb:mt-4 border-2 md:border-0 md:border-b-2 border-gray-500 px-3 py-2">
             <p>Plan Details</p>
-            <p className="font-bold ">{userSubscribe?.planName}</p>
+            <p className="font-bold ">{user?.planName}</p>
             <button className="text-blue-500">Change Plan</button>
           </div>
           <div className="mt-2 mb:mt-4 border-2 md:border-0 md:border-b-2 border-gray-500 px-3 py-2">
@@ -47,6 +69,22 @@ const Account = () => {
       </div>
     </div>
   );
+};
+
+export const getServerSideProps = async (context) => {
+  // redirect user to login page if not logged in
+  if (!context.req?.cookies?.token) {
+    return {
+      redirect: {
+        destination: "/auth/login",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
 
 export default Account;
