@@ -38,7 +38,7 @@ const Home = ({
         setLoading(false);
       }
     });
-  }, [user]);
+  }, []);
 
   if (loading || !user) return <Loader />;
 

@@ -25,18 +25,39 @@ const app = !admin.apps.length
   : admin.app();
 
 const fulfilledOrder = async (session) => {
-  return app
+  const userData = await app
     .firestore()
     .collection("users")
     .doc(session.metadata.userEmail)
-    .set({
-      amount: session.amount_total / 100,
-      planNumber: session.metadata.planNumber,
-      planName: session.metadata.planName,
-      canceled: false,
-      updated: false,
-      timestamp: admin.firestore.FieldValue.serverTimestamp(),
-    });
+    .get();
+  console.log("userData", userData.data());
+  if (userData.data()) {
+    app
+      .firestore()
+      .collection("users")
+      .doc(session.metadata.userEmail)
+      .update({
+        paymentCycle: userData.data().paymentCycle + 1,
+        amount: session.amount_total / 100,
+        planNumber: session.metadata.planNumber,
+        planName: session.metadata.planName,
+        canceled: false,
+      });
+  }
+
+  if (!userData.data())
+    return app
+      .firestore()
+      .collection("users")
+      .doc(session.metadata.userEmail)
+      .set({
+        paymentCycle: 1,
+        amount: session.amount_total / 100,
+        planNumber: session.metadata.planNumber,
+        planName: session.metadata.planName,
+        canceled: false,
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      });
 };
 
 export default async (req, res) => {
