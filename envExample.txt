@@ -1,0 +1,8 @@
+NEXT_PUBLIC_FIREBASE_APIKEY=firebase api key
+NEXT_PUBLIC_MOVIE_APIKEY=moviedb api key
+NEXT_PUBLIC_COOKIE_TOKEN=random text for cookie token
+NEXT_PUBLIC_STRIPE_PUBLIC_KEY=stripe public key
+NEXT_PUBLIC_STRIPE_SECRET_KEY=stripe secret key
+NEXT_PUBLIC_STRIPE_SIGNIN_SECRET=stripe webhook sign in key
+NEXT_PUBLIC_FIREBASE_PRIVATE_KEY=firebase private key
+NEXT_PUBLIC_HOST=http://localhost:3000 or host url
