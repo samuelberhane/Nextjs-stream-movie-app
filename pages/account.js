@@ -34,9 +34,11 @@ const Account = () => {
     });
   }, []);
 
-  onSnapshot(doc(db, "users", auth?.currentUser?.email), (snapshot) => {
-    setUser(snapshot.data());
-  });
+  if (auth?.currentUser) {
+    onSnapshot(doc(db, "users", auth?.currentUser?.email), (snapshot) => {
+      setUser(snapshot.data());
+    });
+  }
 
   // logout user
   const handleLogout = async () => {
