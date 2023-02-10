@@ -37,7 +37,6 @@ const Account = () => {
   onSnapshot(doc(db, "users", auth?.currentUser?.email), (snapshot) => {
     setUser(snapshot.data());
   });
-  console.log("user", user);
 
   // logout user
   const handleLogout = async () => {
@@ -52,8 +51,6 @@ const Account = () => {
       });
     setLoading(false);
   };
-
-  console.log("user", user);
 
   const restartMembership = async () => {
     if (auth?.currentUser) {

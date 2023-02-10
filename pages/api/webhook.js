@@ -30,7 +30,6 @@ const fulfilledOrder = async (session) => {
     .collection("users")
     .doc(session.metadata.userEmail)
     .get();
-  console.log("userData", userData.data());
   if (userData.data()) {
     app
       .firestore()
